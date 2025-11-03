@@ -1,0 +1,9 @@
+{
+   "menus":{
+      "hb-primary-navigation":"menu",
+      "hb-menu-mobile":"mobile-menu",
+      "hb-menu-navigation1":"top-menu2",
+      "hb-menu-navigation2":"top-menu",
+      "hb-category-button":"categories-catalog"
+   }
+}

@@ -1,0 +1,72 @@
+services:
+  wordpress:
+    image: wordpress:php8.2-apache
+    container_name: jarbarlar-wp
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST     : db:3306
+      WORDPRESS_DB_NAME     : ${DB_NAME}
+      WORDPRESS_DB_USER     : ${DB_USER}
+      WORDPRESS_DB_PASSWORD : ${DB_PASSWORD}
+      WORDPRESS_DEBUG       : ${WP_DEBUG}
+    ports:
+      - "8080:80"
+    volumes:
+      - ./wp-content/themes/ebbe:/var/www/html/wp-content/themes/ebbe
+      - ./wp-content/themes/ebbe-child:/var/www/html/wp-content/themes/ebbe-child
+      - ./wp-content/plugins:/var/www/html/wp-content/plugins
+      - ./wp-content/uploads:/var/www/html/wp-content/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - jarbarlar-net
+
+  db:
+    image: mysql:8.0
+    container_name: jarbarlar-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD : root
+      MYSQL_DATABASE      : ${DB_NAME}
+      MYSQL_USER          : ${DB_USER}
+      MYSQL_PASSWORD      : ${DB_PASSWORD}
+      MOCK_FILE_ID        : ${MOCK_FILE_ID}
+    command: --default-authentication-plugin=caching_sha2_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./scripts/entrypoint.sh:/usr/local/bin/custom-entrypoint.sh
+    entrypoint: ["/usr/local/bin/custom-entrypoint.sh"]
+    networks:
+      - jarbarlar-net
+  
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: jarbarlar-pma
+    restart: always
+    environment:
+      PMA_HOST           : db
+      PMA_USER           : ${DB_USER}
+      PMA_PASSWORD       : ${DB_PASSWORD}
+      UPLOAD_LIMIT       : 512M
+      MEMORY_LIMIT       : 512M
+      MAX_EXECUTION_TIME : 600
+    ports:
+      - "8081:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - jarbarlar-net
+
+volumes:
+  db_data:
+
+networks:
+  jarbarlar-net:
+    driver: bridge

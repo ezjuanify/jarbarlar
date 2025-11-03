@@ -1,0 +1,67 @@
+# -----------------------------------------------------------------------------
+# WordPress Core
+# -----------------------------------------------------------------------------
+wp/
+wp-admin/
+wp-includes/
+
+# -----------------------------------------------------------------------------
+# WordPress Content
+# -----------------------------------------------------------------------------
+# Ignore runtime & user-generated files
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/debug.log
+wp-content/wflogs/
+wp-content/backups/
+
+# Allow placeholder file to keep directories tracked
+!wp-content/uploads/.gitkeep
+
+# -----------------------------------------------------------------------------
+# Configuration Files
+# -----------------------------------------------------------------------------
+# Local or sensitive configs
+wp-config-local.php
+.env
+.env.*
+
+# -----------------------------------------------------------------------------
+# Dependencies
+# -----------------------------------------------------------------------------
+# PHP dependencies (if using Composer)
+vendor/
+
+# Node.js dependencies (if using npm/yarn in theme)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# -----------------------------------------------------------------------------
+# System & Editor Files
+# -----------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# -----------------------------------------------------------------------------
+# Logs & Backups
+# -----------------------------------------------------------------------------
+*.log
+*.sql
+*.tar.gz
+*.zip
+*.bak
+
+# -----------------------------------------------------------------------------
+# Docker
+# -----------------------------------------------------------------------------
+# Docker runtime artifacts
+*.pid
+*.seed
+*.pid.lock
+docker-compose.override.yml
