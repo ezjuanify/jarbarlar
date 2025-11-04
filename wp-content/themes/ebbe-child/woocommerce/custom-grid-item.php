@@ -6,14 +6,14 @@
  */
 ?>
 
-<div class="product-wrapper prd_item">
+<div class="products-wrapper prd_item">
     <div class="thumbnail-and-details">
         <a href="<?php echo esc_url($product_data['url']); ?>">
             <?php echo $product_data['thumbnail']; ?>
         </a>
-    <div>
+    </div>
     
-    <div class="woocommerce-title-metas ebbe-allign-left">
+    <div class="woocommerce-title-metas ebbe-alignment-left">
 
         <!-- PRODUCT STOCK & META -->
         <div class="product-meta">
@@ -67,31 +67,16 @@
         <?php endif; ?>
 
         <!-- ADD TO CART - VARIABLE -->
-        <?php if ($product->is_type('variable')): ?>
-            <?php $available_variations = $product->get_available_variations(); ?>
-            <?php if (!empty($available_variations)): ?>
-                <div class="product-variations" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
-                    <span class="label">Select Variant:</span>
-                    <?php foreach ($available_variations as $index => $variation): ?>
-                        <?php
-                            $variation_id = $variation['variation_id'];
-                            $variation_label = implode(' ', array_map('esc_html', $variation['attributes']));
-                            $variation_price = wc_price($variation['display_price']);
-                        ?>
-                        <label class="variant-option">
-                            <input
-                                type="radio"
-                                name="variant-<?php echo esc_attr($product->get_id()) ?>"
-                                value="<?php echo esc_attr($variation_id); ?>"
-                                data-product-id="<?php echo esc_attr($product->get_id()); ?>"
-                                data-variant-id="<?php echo esc_attr($variation_id); ?>"
-                            />
-                            <span class="variant-label"><?php echo $variation_label; ?></span>
-                            <span class="variant-price"><?php echo $variation_price; ?></span>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+        <?php if ($product_data['type'] === 'variable' && !empty($product_data['variations'])): ?>
+            <div class="product-variations">
+                <?php foreach ($product_data['variations'] as $variation): ?>
+                    <label>
+                        <input type="radio" name="variant-<?php echo esc_attr($product_data['id']); ?>" value="<?php echo esc_attr($variation['id']); ?>" />
+                        <span><?php echo $variation['label']; ?></span>
+                        <span><?php echo $variation['price']; ?></span>
+                    </label>
+                <?php endforeach ?>
+            </div>
         <?php endif; ?>
     </div>
 </div>
