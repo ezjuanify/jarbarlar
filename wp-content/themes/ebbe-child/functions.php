@@ -23,324 +23,220 @@ function enqueue_woocommerce_scripts()
 }
 add_action('wp_enqueue_scripts', 'enqueue_woocommerce_scripts');
 
-
-// Shortcode for Products Grid
-
-function custom_products_grid_by_category_shortcode($atts)
+/**
+ * Shortcode: Display Products Grid by Category (with Loyalty Points)
+ * Usage: [custom_products_grid category="fragrance" posts_per_page="4"]
+ */
+function custom_products_grid_by_category_shortcode($attrs)
 {
-   $atts = shortcode_atts(array(
-        'category' => '',      // Default category slug (empty means no category filter)
-        'posts_per_page' => 4, // Default number of products to show
-    ), $atts, 'custom_products_grid_with_loyalty_points');
+   $attrs = shortcode_atts([
+        'category'       => '',
+        'posts_per_page' => 4,
+   ], $attrs, 'custom_products_grid_by_category');
 
-    $category = sanitize_text_field($atts['category']);
-    $posts_per_page = intval($atts['posts_per_page']);
+    $category       = sanitize_text_field($attrs['category']);
+    $posts_per_page = intval($attrs['posts_per_page']);
 
-    $args = array(
+    $args = [
         'post_type'      => 'product',
         'posts_per_page' => $posts_per_page,
         'post_status'    => 'publish',
-    );
+    ];
 
     if (!empty($category)) {
-        $args['tax_query'] = array(
-            array(
-                'taxonomy' => 'product_cat',
-                'field'    => 'slug',
-                'terms'    => $category,
-                'operator' => 'IN',
-            ),
-        );
+        $args['tax_query'] = [[
+            'taxonomy' => 'product_cat',
+            'field'    => 'slug',
+            'terms'    => $category,
+        ]];
     }
 
     $query = new WP_Query($args);
 
     ob_start();
 
-    if ($query->have_posts()) :
+    if ($query->have_posts()) {
         echo '<div class="custom-products-list grid">';
-        while ($query->have_posts()) : $query->the_post();
+        while ($query->have_posts()) {
+            $query->the_post();
             global $product;
 
-            // Fetch loyalty points for the product
-            $earn_campaign = Wlr\App\Helpers\EarnCampaign::getInstance();
-            $user_email = is_user_logged_in() ? wp_get_current_user()->user_email : '';
-            $extra = array(
-                'product' => $product,
-                'is_calculate_based' => 'product',
-                'user_email' => $user_email,
-                'is_message' => true,
+            if (!is_a($product, 'WC_Product')) {
+                continue;
+            }
+
+            $product_id = $product->get_id();
+
+            $product_data = custom_get_product_display_data($product);
+
+            wc_get_template(
+                'custom-grid-item.php',
+                ['product_data' => $product_data],
+                '', // default Woo paths
+                get_stylesheet_directory() . '/woocommerce/' // Override path
             );
-            $cart_action_list = $earn_campaign->getProductActionList();
-            $reward_list = $earn_campaign->getActionEarning($cart_action_list, $extra);
-
-            // Calculate loyalty points
-            $points = 0;
-            foreach ($reward_list as $rewards) {
-                foreach ($rewards as $reward) {
-                    if (isset($reward['point'])) {
-                        $points += $reward['point'];
-                    }
-                }
-            }
-  $sku = $product->get_sku();
-            preg_match('/\d+$/', $sku, $matches);
-            $quantity = $matches[0] ?? '';
-	
-//             $attributes = $product->get_attributes();
-//             $country = '';
-            
-//             if (!empty($attributes)) {
-//                 foreach ($attributes as $attribute) {
-//                     if (strpos(strtolower($attribute->get_name()), 'country') !== false) { // Check if the attribute is named "country"
-//                         $country = $attribute->is_taxonomy()
-//                             ? implode(', ', wc_get_product_terms($product->get_id(), $attribute->get_name(), ['fields' => 'names']))
-//                             : implode(', ', $attribute->get_options()); // Get the country value(s)
-//                     }
-//                 }
-//             }
-            
-            // Use WooCommerce base country if no country attribute is found
-            if (empty($country)) {
-                $country = WC()->countries->get_base_country();
-            }
-            
-            // Display country in the console (optional debugging)
-//             echo "<script>console.log('Country: " . esc_js($country) . "');</script>";
-            
-
-            // Display product rating
-            if (function_exists('wc_get_rating_html')) {
-                $average_rating = $product->get_average_rating();
-                //   / WooCommerce function to display rating
-            }
-
-            // Get country flag URL
-            $flag_url = '';
-            if ($country) {
-                // Make sure the country name is properly formatted and escaped
-                // $country_slug = urlencode($country);
-                $api_url = "https://restcountries.com/v3.1/name/{$country}?fields=flags";
-                $response = wp_remote_get($api_url);
-
-                // Check for errors in the API request
-                if (! is_wp_error($response)) {
-                    $data = wp_remote_retrieve_body($response);
-                    $country_data = json_decode($data, true);
-
-                    // Ensure the flag URL is valid
-                    if (isset($country_data[0]['flags']['png'])) {
-                        $flag_url = $country_data[0]['flags']['png'];
-                    }
-                }
-            }
-
-            // Get the first product category
-            $categories = get_the_terms($product->get_id(), 'product_cat');
-            $first_category = $categories && ! is_wp_error($categories) ? $categories[0]->name : '';
-
-            // Display Rating conditionally (check if the setting is enabled)
-            $show_rating = sanitize_text_field(ebbe()->get_setting('ebbe_shop_product_box_rating'));
-            // $show_rating = filter_var($show_rating, FILTER_VALIDATE_BOOLEAN); // Ensure it's a boolean
-            // 
-
-    ?>
-
-  
-
-            <div class="products-wrapper prd_item">
-                <div class="thumbnail-and-details">
-                    <a href="<?php the_permalink(); ?>">
-                        <?php echo woocommerce_get_product_thumbnail(); ?>
-                    </a>
-                </div>
-
-                <div class="woocommerce-title-metas ebbe-alignment-left">
-                    <div class="product_country">
-
-                        <?php
-
-                        if ($product->is_in_stock()) {
-                            echo '<div class="product-stock-status stockin">';
-                            echo 'In Stock';
-                            echo '</div>';
-                        } else {
-                            echo '<div class="product-stock-status stockout">';
-                            echo 'Out of Stock';
-                            echo '</div>';
-                        }
-                        ?>
-
-                        <?php if ($country) : ?>
-                            <div class="product-country">
-                                <!-- <span>Country: <?php echo esc_html($country); ?></span> -->
-                                <?php if ($flag_url) : ?>
-                                    <div class="product-stock-status">
-                                        <img src="<?php echo esc_url($flag_url); ?>" alt="<?php echo esc_attr($country); ?> flag" class="country-flag" />
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                    <?php if ($first_category) : ?>
-                        <div class="product-collection">
-                            <a class="text-uppercase text-xsmall link-meta"><?php echo esc_html($first_category); ?></a>
-                        </div>
-                    <?php endif; ?>
-					 <?php if ($points > 0) : ?>
-                    <div class="wlr-product-message">
-                        Loyality reward <?php echo esc_html($points); ?> Points!
-                    </div>
-                <?php endif; ?>
-                    <h2 class="woocommerce-loop-product__title">
-                        <a href="<?php the_permalink(); ?>" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
-                            <?php the_title(); ?>
-                        </a>
-                    </h2>
-<?php if (!empty($quantity)) : ?>
-                    <div class="product-quantity">
-    <?php
-    // Ensure the quantity value is numeric and starts with a valid digit
-    $quantity = ltrim($quantity, '0'); // Remove leading zeros
-    if (is_numeric($quantity) && $quantity !== '') {
-        echo esc_html($quantity) . ' ml';
-    }
-    ?>
-</div>
-                <?php endif; ?>
-                    <div class="product-reviews">
-                        <?php
-                        // Display product rating in stars
-                        if (function_exists('wc_get_rating_html')) {
-                            $average_rating = $product->get_average_rating(); // Get the average rating
-
-                            if ($average_rating > 0) {
-                                // Generate and display the star rating HTML
-                                echo wc_get_rating_html($average_rating);
-                            } else {
-                                // Show empty stars for products with no ratings
-                                echo '<div class="star-rating">';
-                                for ($i = 1; $i <= 5; $i++) {
-                                    echo '<span class="star empty-star">&#9734;</span>'; // Unicode empty star
-                                }
-                                echo '</div>';
-                            }
-                        }
-                        ?>
-                    </div>
-      
-
-           <?php
-        // Check if the product is variable
-        if ($product->is_type('variable')) {
-            $available_variations = $product->get_available_variations();
-            if (!empty($available_variations)) {
-                echo '<div class="product-variations">';
-                foreach ($available_variations as $index => $variation) {
-                    $variation_id = $variation['variation_id'];
-                    $variation_attributes = $variation['attributes'];
-                    $variation_price = $variation['display_price'];
-                    $radio_label = '';
-
-                    foreach ($variation_attributes as $attribute_value) {
-                        // Clean the attribute name and display the clean value
-                        $radio_label .= esc_html($attribute_value) . ' ';
-                    }
-
-                    echo '<div class="variant-option" variants="'.$variation_id.'">';
-                    echo '<input class="addtocartvaraint" onclick="addtocartvaraint(this)" variants="'.$variation_id.'"  type="radio" name="variant-' . $product->get_id() . '" id="variant-' . $product->get_id() . '-' . $index . '" data-price="' . esc_attr($variation_price) . '" />';
-                    echo '<label for="variant-' . $product->get_id() . '-' . $index . '">' . trim($radio_label) . '</label>';
-                    echo '</div>';
-                }
-                echo '</div>';
-            }
         }
-        ?>
-<!-- 		varaint Add to cart			 -->
-   <script>  
- 
-	 function addtocartvaraint(variants) {
-    // Get the variant ID from the attribute
-    let variantId = variants.getAttribute('variants');
-
-    // Find the closest '.products-wrapper' and locate the target anchor element
-    let productWrapper = variants.closest('.products-wrapper');
-    if (productWrapper) {
-        let update = productWrapper.querySelector('.product-actionsss a[data-product_id]');
-        if (update) {
-            // Set the initial display property to flex
-            update.style.setProperty('display', 'flex', 'important');
-
-            // Check if the next sibling is the target element and remove it
-            let sibling = update.nextElementSibling;
-            if (sibling && sibling.classList.contains('added_to_cart') && sibling.classList.contains('wc-forward')) {
-                sibling.remove();
-            }
-
-            // Update the text and attributes dynamically
-            update.textContent = 'Add to Cart';
-            update.classList.add('ajax_add_to_cart', 'product_type_simple');
-            update.classList.remove('product_type_variable');
-            update.setAttribute('href', `?add-to-cart=${variantId}`);
-            update.setAttribute('data-product_id', variantId);
-
-            // Periodically check for siblings using setInterval
-            let intervalId = setInterval(() => {
-                let nextSibling = update.nextElementSibling;
-                if (nextSibling && nextSibling.classList.contains('added_to_cart') && nextSibling.classList.contains('wc-forward')) {
-                    // If the sibling exists, hide the update element
-                    update.style.setProperty('display', 'none', 'important');
-
-                    // Stop the interval once the condition is met
-                    clearInterval(intervalId);
-                }
-            }, 100); // Check every 1 second
-        }
-    }
-}
-
-
-
-</script>
-			<!-- 	End	varaint Add to cart			 -->		
-           <!-- Price Container -->
-        <div class="product-price" id="product-price-<?php echo $product->get_id(); ?>">
-            <?php echo $product->get_price_html(); ?>
-        </div>
-                    <!-- Display product country and flag -->
-
-
-                    <!-- Display first category -->
-
-
-                    <!-- Product actions -->
-                    <div class="product-actionsss">
-                        <?php
-                       
-                        $button_text = sanitize_text_field(ebbe()->get_setting('ebbe_shop_product_box_button_text'));
-                        if ($button_text == 'only-icon') {
-                            ebbe_add_to_cart_text_to_icon();
-                        } else {
-                            echo '</a>';
-                            woocommerce_template_loop_add_to_cart();
-                        }
-                        ?>
-
-                    </div>
-                </div>
-            </div>
-        <?php
-        endwhile;
         echo '</div>';
-    else :
-        echo '<p>No products found.</p>';
-    endif;
+    }
 
     wp_reset_postdata();
-
     return ob_get_clean();
 }
 add_shortcode('custom_products_grid', 'custom_products_grid_by_category_shortcode');
+
+/**
+ * Prepare display data for a WooCommerce product.
+ */
+function custom_get_product_display_data($product) {
+    if (!$product instanceof WC_Product) {
+        return [];
+    }
+
+    $data = [
+        'id'         => $product->get_id(),
+        'title'      => $product->get_name(),
+        'url'        => get_permalink($product->get_id()),
+        'thumbnail'  => $product->get_image(),
+        'stock'      => $product->is_in_stock(),
+        'category'   => '',
+        'quantity'   => '',
+        'flag_url'   => '',
+        'points'     => 0,
+        'rating'     => wc_get_rating_html($product->get_average_rating()),
+        'type'       => $product->get_type(),
+        'variations' => [],
+    ];
+
+    // Get first category
+    $categories = get_the_terms($product->get_id(), 'product_cat');
+    if ($categories && !is_wp_error($categories)) {
+        $data['category'] = esc_html($categories[0]->name);
+    }
+
+    // Loyalty points
+    $data['points'] = custom_get_loyalty_points($product);
+
+    // Quantity parsing from SKU
+    $sku = $product->get_sku();
+    if ($sku && preg_match('/\d+$/', $sku, $matches)) {
+        $data['quantity'] = ltrim($matches[0], '0') . ' ml';
+    }
+
+    // Base country (no API calls)
+    $data['flag_url'] = custom_get_country_flag_url(WC()->countries->get_base_country());
+
+    // Variations
+    $data['variations'] = custom_get_product_variations($product);
+
+    return $data;
+}
+
+/**
+ * Returns loyalty points of current user.
+ */
+function custom_get_loyalty_points($product) {
+    if (!$product instanceof WC_Product) {
+        return 0;
+    }
+
+    $cache_key     = 'custom_loyalty_points_product_' . $product->get_id();
+    $cached_points = get_transient($cache_key);
+
+    if ($cached_points !== false) {
+        return (int) $cached_points;
+    }
+
+    $points = 0;
+
+    if (class_exists('Wlr\App\Helpers\EarnCampaign')) {
+        $earn_campaign = Wlr\App\Helpers\EarnCampaign::getInstance();
+        $user_email = is_user_logged_in() ? wp_get_current_user()->user_email : '';
+
+        $extra = [
+            'product'            => $product,
+            'is_calculate_based' => 'product',
+            'user_email'         => $user_email,
+            'is_message'         => true,
+        ];
+
+        $cart_action_list = $earn_campaign->getProductActionList();
+        $reward_list      = $earn_campaign->getActionEarning($cart_action_list, $extra);
+
+        foreach ($reward_list as $rewards) {
+            foreach ($rewards as $reward) {
+                if (!empty($reward['point'])) {
+                    $points += (int) $reward['point'];
+                }
+            }
+        }
+    }
+
+    set_transient($cache_key, $points, HOUR_IN_SECONDS * 2);
+
+    return (int) $points;
+}
+
+/**
+ * Returns cached flag URL by country code.
+ */
+function custom_get_country_flag_url($country_code) {
+    $country_code = strtoupper(sanitize_text_field($country_code));
+    $cache_key    = 'country_flag_' . $country_code;
+    $cached_flag  = get_transient($cache_key);
+
+    if ($cached_flag !== false) {
+        return $cached_flag;
+    }
+
+    $response = wp_remote_get("https://restcountries.com/v3.1/alpha/${country_code}?fields=flags");
+
+    if (is_wp_error($response)) {
+        return '';
+    }
+
+    $data     = json_decode(wp_remote_retrieve_body($response), true);
+    $flag_url = $data[0]['flags']['png'] ?? '';
+
+    if ($flag_url) {
+        set_transient($cache_key, esc_url_raw($flag_url), WEEK_IN_SECONDS);
+    }
+
+    return $flag_url;
+}
+
+function custom_get_product_variations($product) {
+    if (!$product || !$product->is_type('variable')) {
+        return [];
+    }
+
+    $variations = [];
+
+    foreach ($product->get_available_variations() as $variation) {
+        $variation_label = implode(' ', array_map('esc_html', $variation['attributes']));
+        $variation_price = wc_price($variation['display_price']);
+
+        $variations[] = [
+            'id'    => $variation['variation_id'],
+            'label' => $variation_label,
+            'price' => $variation_price,
+        ];
+    }
+
+    return $variations;
+}
+
+function enqueue_custom_add_to_cart_variant_script() {
+    if (is_shop() || is_product_category() || is_front_page()) {
+        wp_enqueue_script(
+            'add-to-cart-variant',
+            get_stylesheet_directory_uri() . '/assets/js/add-to-cart-variant.js',
+            ['jquery', 'wc-add-to-cart'],
+            '1.0.0',
+            true
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'enqueue_custom_add_to_cart_variant_script');
 
 
 // Shortcode for Products Slider

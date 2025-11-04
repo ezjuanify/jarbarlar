@@ -573,8 +573,9 @@
               })
               .catch(err => console.error('Error fetching HTML:', err));
           }
-          if (document.querySelector('.custom_product.product_meta.extractdetails .metaBox_content.characteristics p').innerHTML === 'No attributes found.' ||
-            document.querySelector('.custom_product.product_meta.extractdetails .metaBox_content.characteristics p').innerHTML.trim() === '') {
+
+          const custom_meta_p = document.querySelector('.custom_product.product_meta.extractdetails .metaBox_content.characteristics p');
+          if (custom_meta_p && (custom_meta_p.innerHTML === 'No attributes found.' || custom_meta_p.innerHTML.trim() === '')) {
             document.querySelector('.custom_product.product_meta.extractdetails').style.display = 'none';
           }
 

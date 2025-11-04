@@ -679,95 +679,6 @@ if (!Element.prototype.closest) {
      * Search form.
      */
     Ebbe.prototype.initSearchForm = function () {
-        // var searchOnBtn = document.querySelector('.cb-row--desktop .header-search_icon-item .search-icon .ic-search');
-        // var searchOffBtn = document.querySelector('.cb-row--desktop .header-search_icon-item .search-icon .ic-close');
-        // var searchModal  = document.querySelector('.cb-row--desktop .header-search_icon-item');
-        // if(searchOnBtn) {
-        //     searchOnBtn.addEventListener('click',()=> {
-        //         var overCloseDiv = document.createElement('div');
-        //         overCloseDiv.classList.add('close-seach-overlay');
-        //         document.querySelector('.cb-row--desktop .search-icon').insertAdjacentElement('afterend', overCloseDiv);
-        //         searchModal.classList.add('search-left');
-        //         searchModal.classList.add('active');
-        //         document.querySelector('.cb-row--desktop .close-seach-overlay').addEventListener('click',()=>{
-        //             searchModal.classList.remove('search-left');
-        //             searchModal.classList.remove('active');
-        //             document.querySelector('.cb-row--desktop .close-seach-overlay').remove();
-        //         })
-        //         mobImpClc();
-        //     })
-        // }
-        // if(searchOffBtn){
-        //     searchOffBtn.addEventListener('click',()=> {
-        //         searchModal.classList.remove('search-left');
-        //         searchModal.classList.remove('active');
-        //         document.querySelector('.cb-row--desktop .close-seach-overlay').remove();
-        //     })    
-        // }
-        
-        // var searchOnBtnMob = document.querySelector('.cb-row--mobile .header-search_icon-item .search-icon .ic-search');
-        // var searchOffBtnMob = document.querySelector('.cb-row--mobile .header-search_icon-item .search-icon .ic-close');
-        // var searchModalMob  = document.querySelector('.cb-row--mobile .header-search_icon-item');
-        // if(searchOnBtnMob){
-        //     searchOnBtnMob.addEventListener('click',()=> {
-        //         var overCloseDiv = document.createElement('div');
-        //         overCloseDiv.classList.add('close-seach-overlay');
-        //         document.querySelector('.cb-row--mobile .search-icon').insertAdjacentElement('afterend', overCloseDiv);
-        //         searchModalMob.classList.add('search-right');
-        //         searchModalMob.classList.add('active');
-        //         document.querySelector('.cb-row--mobile .close-seach-overlay').addEventListener('click',()=>{
-        //             searchModalMob.classList.remove('search-right');
-        //             searchModalMob.classList.remove('active');
-        //             document.querySelector('.cb-row--mobile .close-seach-overlay').remove();
-        //         })
-        //     })
-        // }
-        // if(searchOffBtnMob){
-        //     searchOffBtnMob.addEventListener('click',()=> {
-        //         searchModalMob.classList.remove('search-right');
-        //         searchModalMob.classList.remove('active');
-        //         document.querySelector('.cb-row--mobile .close-seach-overlay').remove();
-        //     })
-        // }
-        
-        // function mobImpClc(){
-        //     var mobSearchInp = document.querySelector('.cb-row--mobile .search-field');
-        //     if(mobSearchInp){
-        //       mobSearchInp.addEventListener('click', () => {
-        //             console.log('running');
-                
-        //             // Ensure the classes are added only if they are not already present
-        //             if (!searchModalMob.classList.contains('search-right')) {
-        //                 searchModalMob.classList.add('search-right');
-        //             }
-        //             if (!searchModalMob.classList.contains('active')) {
-        //                 searchModalMob.classList.add('active');
-        //             }
-                
-        //             let interval = setInterval(() => {
-        //                 console.log('running11111111');
-                
-        //                 // Prevent duplicate class addition
-        //                 if (!searchModalMob.classList.contains('search-right')) {
-        //                     searchModalMob.classList.add('search-right');
-        //                 }
-        //                 if (!searchModalMob.classList.contains('active')) {
-        //                     searchModalMob.classList.add('active');
-        //                 }
-                
-        //             }, 800);
-                
-        //             // Stop the interval after 2 seconds
-        //             setTimeout(() => {
-        //                 clearInterval(interval);
-        //             }, 2000);
-        //         });
-        //     }
-        // }
-        // mobImpClc();
-        
-        
-
         var searchItems = document.querySelectorAll('.header-search_icon-item');
         var that = this;
         searchItems.forEach(function (container) {
@@ -808,10 +719,9 @@ if (!Element.prototype.closest) {
                 /**
                  * When click outside search form.
                  */
-                that.addEvent(document, 'click', clickOutSideSearchIcon.bind(that));
+                // that.addEvent(document, 'click', clickOutSideSearchIcon.bind(that));
             }
         });
-        
 
         that.searchFormAutoAlign();
     };
