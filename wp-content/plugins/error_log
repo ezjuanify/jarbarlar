@@ -1,8 +1,0 @@
-[25-Jan-2025 16:36:52 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function add_action() in /home/jarba850/public_html/wp-content/plugins/hello.php:69
-Stack trace:
-#0 {main}
-  thrown in /home/jarba850/public_html/wp-content/plugins/hello.php on line 69
-[28-Jan-2025 08:08:23 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function add_action() in /home/jarba850/public_html/wp-content/plugins/hello.php:69
-Stack trace:
-#0 {main}
-  thrown in /home/jarba850/public_html/wp-content/plugins/hello.php on line 69

@@ -1,25 +1,20 @@
-(function ($) {
-    'use strict';
+jQuery(function ($) {
+    $(document).on('change', '.product-variations input[type="radio"]', function () {
+        const variantId     = $(this).val();
+        const $closest      = $(this).closest('.product-bottom');
+        const $addToCartBtn = $closest.find('.add_to_cart_button');
 
-    $(document).on('change', '.product_variants input[type="radio"]', function () {
-        const variantId = $(this).data('variant-id');
-        const productWrapper = $(this).closest('.products-wrapper');
-        const addToCartBtn = productWrapper.find('.add_to_cart_button');
-
-        if (!addToCartBtn.length) return;
+        if (!$addToCartBtn.length) return;
 
         // Update the Add to Cart button dynamically
-        addToCartBtn
+        $addToCartBtn
             .attr('data-product_id', variantId)
             .attr('href', `?add-to-cart=${variantId}`)
-            .removeClass('product_type_variable')
-            .addClass('ajax_add_to_cart product_type_simple')
-            .text('Add to Cart');
+            .addClass('button add_to_cart_button ajax_add_to_cart')
+            .text('Add to Cart / Bundle')
+            .css('display', 'flex');
 
         // Remove any previously added WooCommerce "Add to cart" notice
-        productWrapper.find('.added_to_cart.wc-forward').remove();
-
-        // Restore button visibility
-        addToCartBtn.css('display', 'flex');
+        $closest.find('.button.select-options').remove();
     });
-})(jQuery);
+});

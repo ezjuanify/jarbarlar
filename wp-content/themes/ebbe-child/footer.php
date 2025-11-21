@@ -20,37 +20,39 @@
 
         <script>
           document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
+            // setTimeout(() => {
 
 
 
-              // if(document.querySelector('#woocommerce_product_categories-12')){
-              const clickbtn = document.querySelector('#woocommerce_product_categories-12 .select2');
-              // console.log("click btn" + clickbtn);
-              clickbtn.addEventListener('click', () => {
-                // alert('hello')
-                setTimeout(() => {
-                  // alert('in function');
+            //   // if(document.querySelector('#woocommerce_product_categories-12')){
+            //   const clickbtn = document.querySelector('#woocommerce_product_categories-12 .select2');
+            //   // console.log("click btn" + clickbtn);
+            //   if (!clickbtn) return;
+
+            //   clickbtn.addEventListener('click', () => {
+            //     // alert('hello')
+            //     setTimeout(() => {
+            //       // alert('in function');
 
 
-                  const allItems = document.querySelectorAll("#select2-product_cat-results > li");
+            //       const allItems = document.querySelectorAll("#select2-product_cat-results > li");
 
 
-                  let afterWineVarietal = false;
-                  allItems.forEach(item => {
-                    console.log('hello' + allItems)
-                    if (item.textContent.includes("Wine Varietal")) {
-                      afterWineVarietal = true;
-                      item.style.display = "none";
-                    } else if (afterWineVarietal && item.textContent.includes("\u00A0\u00A0\u00A0")) {
-                      item.style.display = ""; // Ensure it's visible
-                    } else {
-                      item.style.display = "none";
-                    }
-                  });
-                }, 0);
-              })
-            }, 1000);
+            //       let afterWineVarietal = false;
+            //       allItems.forEach(item => {
+            //         console.log('hello' + allItems)
+            //         if (item.textContent.includes("Wine Varietal")) {
+            //           afterWineVarietal = true;
+            //           item.style.display = "none";
+            //         } else if (afterWineVarietal && item.textContent.includes("\u00A0\u00A0\u00A0")) {
+            //           item.style.display = ""; // Ensure it's visible
+            //         } else {
+            //           item.style.display = "none";
+            //         }
+            //       });
+            //     }, 0);
+            //   })
+            // }, 1000);
             // }
           });
           document.addEventListener('DOMContentLoaded', function () {

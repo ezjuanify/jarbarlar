@@ -6,9 +6,15 @@ wp-admin/
 wp-includes/
 
 # -----------------------------------------------------------------------------
-# WordPress Content
+# WordPress Content – Selectively tracked
 # -----------------------------------------------------------------------------
-# Ignore runtime & user-generated files
+
+# Plugins – ignore all except custom plugins
+wp-content/plugins/*
+!wp-content/plugins/*-custom/
+!wp-content/plugins/custom-*/
+
+# Uploads & runtime
 wp-content/uploads/
 wp-content/cache/
 wp-content/upgrade/
@@ -16,31 +22,37 @@ wp-content/debug.log
 wp-content/wflogs/
 wp-content/backups/
 
-# Allow placeholder file to keep directories tracked
 !wp-content/uploads/.gitkeep
+
+# Themes – track BOTH parent and child themes
+# (Remove ignore rules for themes)
+# wp-content/themes/*   <-- removed
+# !wp-content/themes/*-child/   <-- removed
+# !wp-content/themes/custom-*/  <-- removed
 
 # -----------------------------------------------------------------------------
 # Configuration Files
 # -----------------------------------------------------------------------------
-# Local or sensitive configs
 wp-config-local.php
+wp-config.php
 .env
 .env.*
 
 # -----------------------------------------------------------------------------
-# Dependencies
+# Composer
 # -----------------------------------------------------------------------------
-# PHP dependencies (if using Composer)
 vendor/
 
-# Node.js dependencies (if using npm/yarn in theme)
+# -----------------------------------------------------------------------------
+# Node
+# -----------------------------------------------------------------------------
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 # -----------------------------------------------------------------------------
-# System & Editor Files
+# System
 # -----------------------------------------------------------------------------
 .DS_Store
 Thumbs.db
@@ -53,6 +65,7 @@ Thumbs.db
 # -----------------------------------------------------------------------------
 *.log
 *.sql
+*.tar
 *.tar.gz
 *.zip
 *.bak
@@ -60,8 +73,7 @@ Thumbs.db
 # -----------------------------------------------------------------------------
 # Docker
 # -----------------------------------------------------------------------------
-# Docker runtime artifacts
+docker-compose.override.yml
 *.pid
 *.seed
 *.pid.lock
-docker-compose.override.yml
