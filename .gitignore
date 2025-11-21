@@ -36,6 +36,10 @@ wp-content/wflogs/
 wp-content/backups/
 wp-content/debug.log
 
+# Plesk maintenance auto-generated files
+wp-content/maintenance/
+wp-content/maintenance.php
+
 # Allow a placeholder if needed
 !wp-content/uploads/.gitkeep
 
