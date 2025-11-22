@@ -12,10 +12,11 @@ wp-includes/
 # ------------------------------
 # PLUGINS
 # ------------------------------
-# Ignore ALL plugins except custom ones
+# Ignore all plugin contents
 wp-content/plugins/*
-!wp-content/plugins/*-custom/
-!wp-content/plugins/custom-*/
+
+# But keep the plugins folder itself in Git
+!wp-content/plugins/.gitkeep
 
 # ------------------------------
 # THEMES
@@ -29,7 +30,7 @@ wp-content/themes/*/node_modules/
 # ------------------------------
 # UPLOADS & RUNTIME FILES
 # ------------------------------
-wp-content/uploads/
+wp-content/uploads/*
 wp-content/cache/
 wp-content/upgrade/
 wp-content/wflogs/
@@ -37,8 +38,9 @@ wp-content/backups/
 wp-content/debug.log
 
 # Plesk maintenance auto-generated files
-wp-content/maintenance/
-wp-content/maintenance.php
+wp-content/maintenance/*
+
+!wp-content/maintenance/.gitkeep
 
 # Allow a placeholder if needed
 !wp-content/uploads/.gitkeep
