@@ -134,11 +134,6 @@ footer, .site-footer {
   object-fit: cover;
 }
 
-.main_bannerwrapper .elementor-widget-container {
-  text-align: center;
-  padding: 60px 20px;
-}
-
 /* =========================================================
    5. WooCommerce Essentials
    ========================================================= */
@@ -181,28 +176,7 @@ body.woocommerce nav.woocommerce-pagination {
 }
 
 /* =========================================================
-   6. Elementor Widgets (Core)
-   ========================================================= */
-.elementor-element,
-.elementor-widget-container {
-  box-sizing: border-box;
-}
-
-.elementor a {
-  transition: all 0.3s ease;
-}
-
-.elementor img {
-  border-radius: 4px;
-}
-
-.elementor-widget-divider .elementor-divider {
-  border-top: 1px solid #eee;
-  margin: 30px 0;
-}
-
-/* =========================================================
-   7. Collections & Blog Layouts
+   6. Collections & Blog Layouts
    ========================================================= */
 
 /* --- Collection Grids --- */
@@ -284,7 +258,7 @@ body.woocommerce nav.woocommerce-pagination {
 }
 
 /* =========================================================
-   8. Buttons & Forms
+   7. Buttons & Forms
    ========================================================= */
 button,
 input[type="submit"],
@@ -306,7 +280,7 @@ button:hover,
 }
 
 /* =========================================================
-   9. Responsive Adjustments
+   8. Responsive Adjustments
    ========================================================= */
 @media (max-width: 992px) {
   .nav-menu-desktop ul {

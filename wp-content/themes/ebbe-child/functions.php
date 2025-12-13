@@ -13,3 +13,5 @@ require_once get_theme_file_path('/inc/features/index.php');
 
 // Load Helpers
 require_once get_theme_file_path('/inc/helpers.php');
+
+?>

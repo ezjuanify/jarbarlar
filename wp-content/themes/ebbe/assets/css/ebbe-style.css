@@ -313,10 +313,6 @@ body .comment-list .comment-body {
 body .nav-menu-mobile .menu li {
     border-bottom: 1px solid #eee;
 }
-.ebbe-custom .mt-addons-blog-posts-carousel-date a {
-    font-weight: 500;
-    color: #888888;
-}
 #reply-title.comment-reply-title {
     font-size: 32px;
     line-height: 40px;
@@ -348,13 +344,6 @@ body .swiper-pagination-bullet-active,
 .mt-addons-banner-simple-top .mt-addons-banner {
     padding-right: 30px;
 }
-.ebbe-custom .mt-addons-blog-posts-carousel-head-content {
-    padding: 0px;
-    margin-top: 20px;
-}
-.ebbe-custom .mt-addons-blog-posts-carousel-single-post-wrapper {
-    box-shadow: none;
-}
 .ebbe-custom .mt-addons-category-tabs img.mt-addons-icon {
     max-height: 40px; }
 .woosw-list table.woosw-items .woosw-item .woosw-item--name a {
@@ -362,15 +351,6 @@ body .swiper-pagination-bullet-active,
 }
 .mt-addons-accordion-holder .mt-addons-accordion-header {
     color: #000;
-}
-.elementor-element-0c28b79 .mt-icon-listgroup-title a {
-    font-weight: 400;
-}
-.ebbe-custom .mt-addons-blog-posts-carousel-date {
-    font-size: 12px;
-    line-height: 19px;
-    font-weight: 500;
-    text-transform: uppercase;
 }
 .ebbe-custom .mt-addons-category-tabs nav ul li a {
     padding: 25px 0; }
@@ -380,14 +360,6 @@ body .swiper-pagination-bullet-active,
 .ebbe-custom .mt-addons-category-tabs .mt-addons-title {
     font-size: 20px !important;
     font-weight: 600; 
-}
-.ebbe-custom .mt-addons-blog-posts-carousel-thumbnail:hover img {
-    filter: brightness(0.8);
-}
-body .mt-addons-blog-posts-carousel-custom a {
-    font-size: 13px;
-    font-weight: 600;
-    padding: 15px 30px;
 }
 body .mt-addons-banner-button a {
     color: #222 !important;
@@ -410,9 +382,6 @@ body .mt-addons-banner-button a:hover{
 }
 body .gallery img {
     background: #fff;
-}
-.elementor-image-gallery .gallery-item {
-    margin-bottom: 0px !important;
 }
 footer .widget_mt_address_social_icons .social-links a:after {
     border: 1px solid #ccc;
@@ -1012,9 +981,6 @@ body tr.woocommerce-cart-form__cart-item.cart_item {
     .no-slide-col {
         width: 0% !important;
     }
-    .ebbe-slider-col .elementor-widget-wrap {
-        margin-left: 50px !important;
-    }
 }
 /* Nest Hub Max*/
 @media only screen and (min-width: 1229px) and (max-width: 1300px) {
@@ -1042,9 +1008,6 @@ body tr.woocommerce-cart-form__cart-item.cart_item {
     .no-slide-col {
         width: 0% !important;
     }
-    .ebbe-slider-col .elementor-widget-wrap {
-        margin-left: 50px !important;
-    }
 }
 @media only screen and (min-width: 1300px) and (max-width: 1400px) {
     .ebbe-slider-col {
@@ -1055,9 +1018,6 @@ body tr.woocommerce-cart-form__cart-item.cart_item {
     }
     .no-slide-col {
         width: 0% !important;
-    }
-    .ebbe-slider-col .elementor-widget-wrap {
-        margin-left: 80px !important;
     }
 }
 @media only screen and (max-width: 319px) {

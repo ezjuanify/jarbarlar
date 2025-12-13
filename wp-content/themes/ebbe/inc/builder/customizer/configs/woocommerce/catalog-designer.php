@@ -100,20 +100,20 @@ class ebbe_WC_Catalog_Designer {
         $user_country = WC()->countries->get_base_country(); // This fetches the store base country
 
         // Fetch country flag from Restcountries API
-        $flag_url = $this->get_country_flag_url( $user_country );
+        // $flag_url = $this->get_country_flag_url( $user_country );
 
         // Display stock with country flag
-        if ( $stock_status === 'instock' ) {
-            echo '<div class="product-stock-status stockin">';
-            echo '<img src="' . esc_url($flag_url) . '" alt="' . esc_attr($user_country) . ' Flag" class="stock-country-flag" />';
-            echo esc_html( 'In Stock' );
-            echo '</div>';
-        } elseif ( $stock_status === 'outofstock' ) {
-            echo '<div class="product-stock-status stockout">';
-            echo '<img src="' . esc_url($flag_url) . '" alt="' . esc_attr($user_country) . ' Flag" class="stock-country-flag" />';
-            echo esc_html( 'Out of Stock' );
-            echo '</div>';
-        }
+        // if ( $stock_status === 'instock' ) {
+        //     echo '<div class="product-stock-status stockin">';
+        //     echo '<img src="' . esc_url($flag_url) . '" alt="' . esc_attr($user_country) . ' Flag" class="stock-country-flag" />';
+        //     echo esc_html( 'In Stock' );
+        //     echo '</div>';
+        // } elseif ( $stock_status === 'outofstock' ) {
+        //     echo '<div class="product-stock-status stockout">';
+        //     echo '<img src="' . esc_url($flag_url) . '" alt="' . esc_attr($user_country) . ' Flag" class="stock-country-flag" />';
+        //     echo esc_html( 'Out of Stock' );
+        //     echo '</div>';
+        // }
     }
 	function get_country_flag_url( $country_code ) {
         $api_url = "https://restcountries.com/v3.1/alpha/{$country_code}";
