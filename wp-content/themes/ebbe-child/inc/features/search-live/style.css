@@ -1,0 +1,13 @@
+.loadingone {
+    border: 5px solid black;
+    border-top: 5px solid white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}

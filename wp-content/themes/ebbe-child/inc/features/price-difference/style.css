@@ -1,0 +1,7 @@
+.price-difference-amount {
+    display: inline-block;
+    margin-left: 6px;
+    color: #d00;
+    font-weight: 600;
+    font-size: 0.9em;
+}

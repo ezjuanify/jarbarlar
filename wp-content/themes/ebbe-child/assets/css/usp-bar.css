@@ -1,0 +1,42 @@
+.usp-bar {
+    width: 100%;
+}
+
+.usp-bar > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.usp-bar__item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.usp-bar__item img {
+    width: 20px;
+    height: 20px;
+}
+
+.usp-bar__item span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+
+@media (max-width: 1200px) {
+    .usp-bar > div {
+        animation: usp-loop 33s linear infinite;
+        white-space: nowrap;
+        gap: 10px;
+        width: fit-content;
+    }
+    .usp-bar__item { margin: 0 10px; }
+}
+
+@keyframes usp-loop {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
